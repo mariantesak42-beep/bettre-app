@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack -p 3020",
-    "build": "next build --webpack",
+    "build": "prisma generate && next build --webpack",
     "start": "next start -p 3020",
     "lint": "eslint",
     "db:migrate": "prisma migrate dev",
