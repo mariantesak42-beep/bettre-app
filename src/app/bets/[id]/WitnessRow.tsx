@@ -13,9 +13,9 @@ type Witness = {
 };
 
 const RESPONSE_STYLES: Record<Witness["response"], string> = {
-  PENDING: "bg-zinc-100 text-zinc-600",
-  CONFIRMED_SUCCESS: "bg-emerald-100 text-emerald-700",
-  CONFIRMED_FAILURE: "bg-red-100 text-red-700",
+  PENDING: "bg-white text-ink",
+  CONFIRMED_SUCCESS: "bg-lime-400 text-ink",
+  CONFIRMED_FAILURE: "bg-red-600 text-white",
 };
 
 const RESPONSE_LABELS: Record<Witness["response"], string> = {
@@ -44,17 +44,17 @@ export default function WitnessRow({ witness, canInvite }: { witness: Witness; c
   const name = witness.user?.name ?? witness.label ?? "Unclaimed invite";
 
   return (
-    <li className="rounded-lg border border-zinc-200 bg-white">
-      <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+    <li className="pop-sm overflow-hidden bg-white">
+      <div className="flex items-center justify-between gap-3 px-3.5 py-2.5">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-xs font-semibold text-zinc-500">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-sun-100 text-xs font-extrabold text-ink">
             {name.charAt(0).toUpperCase()}
           </div>
-          <span className="text-sm text-zinc-800">{name}</span>
+          <span className="text-sm font-bold text-ink">{name}</span>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${RESPONSE_STYLES[witness.response]}`}
+            className={`flex items-center gap-1 rounded-full border-2 border-ink px-2.5 py-1 text-xs font-extrabold ${RESPONSE_STYLES[witness.response]}`}
           >
             {witness.response === "PENDING" && <Clock size={12} />}
             {witness.response === "CONFIRMED_SUCCESS" && <Check size={12} />}
@@ -64,7 +64,7 @@ export default function WitnessRow({ witness, canInvite }: { witness: Witness; c
           {canInvite && !witness.userId && (
             <button
               onClick={() => setExpanded((v) => !v)}
-              className="flex items-center gap-1 rounded-full border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-50"
+              className="flex items-center gap-1 rounded-full border-2 border-ink px-2.5 py-1 text-xs font-extrabold text-ink hover:bg-sun-100"
             >
               <Link2 size={12} />
               Invite
@@ -74,16 +74,16 @@ export default function WitnessRow({ witness, canInvite }: { witness: Witness; c
         </div>
       </div>
       {expanded && (
-        <div className="flex items-center gap-2 border-t border-zinc-100 bg-zinc-50 px-3 py-2.5">
+        <div className="flex items-center gap-2 border-t-2 border-ink bg-sun-50 px-3.5 py-2.5">
           <input
             readOnly
             value={inviteUrl}
             onFocus={(e) => e.currentTarget.select()}
-            className="flex-1 truncate rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-xs text-zinc-600"
+            className="flex-1 truncate rounded-lg border-2 border-ink bg-white px-2 py-1.5 text-xs text-ink"
           />
           <button
             onClick={handleCopy}
-            className="flex shrink-0 items-center gap-1 rounded-md bg-zinc-800 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-zinc-900"
+            className="flex shrink-0 items-center gap-1 rounded-lg border-2 border-ink bg-ink px-2.5 py-1.5 text-xs font-extrabold text-white"
           >
             {copied ? <Check size={12} /> : <Copy size={12} />}
             {copied ? "Copied" : "Copy link"}

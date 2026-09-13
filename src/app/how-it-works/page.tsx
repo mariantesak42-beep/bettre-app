@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Target, Users, HeartHandshake, NotebookPen, ShieldCheck, Sparkles, ListChecks } from "lucide-react";
+import Star from "../Star";
 
 const STEPS = [
   {
@@ -39,18 +40,20 @@ const STEPS = [
   },
 ];
 
-const STEP_ACCENTS = ["bg-cerulean-600", "bg-flamingo-500", "bg-coral", "bg-gold", "bg-lime"];
+const STEP_ACCENTS = ["bg-lime-400", "bg-flamingo-400", "bg-sun-400"];
 
 export default function HowItWorksPage() {
   return (
     <div>
-      <section className="bg-cerulean-600 text-ink">
-        <div className="mx-auto max-w-2xl px-4 py-14 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/40">
-            <ListChecks size={22} />
+      <section className="relative overflow-hidden border-b-[3px] border-ink bg-lime-400 text-ink">
+        <Star className="absolute -left-2 top-8 h-9 w-9 text-flamingo-500 rotate-12" />
+        <Star className="absolute right-8 top-20 h-7 w-7 text-sun-500 -rotate-12" />
+        <div className="relative mx-auto max-w-2xl px-4 py-16 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-ink bg-white/60">
+            <ListChecks size={24} />
           </div>
-          <h1 className="mt-4 text-3xl font-bold">How it works</h1>
-          <p className="mx-auto mt-2 max-w-md text-ink/70">
+          <h1 className="mt-4 font-heading text-4xl font-extrabold">How it works</h1>
+          <p className="mx-auto mt-2 max-w-md font-medium text-ink/80">
             Bettre yourself or Bettre the world — here&apos;s the mechanic behind it, step by step.
           </p>
         </div>
@@ -62,42 +65,36 @@ export default function HowItWorksPage() {
             const Icon = step.icon;
             const accent = STEP_ACCENTS[i % STEP_ACCENTS.length];
             return (
-              <li key={step.title} className="flex gap-4 rounded-2xl bg-white p-5 shadow-sm">
+              <li key={step.title} className="pop flex gap-4 bg-white p-5">
                 <div className="flex shrink-0 flex-col items-center gap-2">
                   <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold text-ink ${accent}`}
+                    className={`flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold text-ink ${accent}`}
                   >
                     {i + 1}
                   </div>
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg text-ink ${accent}`}>
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg border-2 border-ink text-ink ${accent}`}>
                     <Icon size={16} />
                   </div>
                 </div>
                 <div>
-                  <h2 className="font-semibold text-zinc-900">{step.title}</h2>
-                  <p className="mt-1 text-sm text-zinc-600">{step.description}</p>
+                  <h2 className="font-heading font-extrabold text-ink">{step.title}</h2>
+                  <p className="mt-1 text-sm font-medium text-ink/70">{step.description}</p>
                 </div>
               </li>
             );
           })}
         </ol>
 
-        <p className="mt-6 text-sm text-zinc-500">
+        <p className="mt-6 text-sm font-medium text-ink/60">
           Changed your mind early? You can call it yourself — mark a bet failed anytime, no need to
           wait for the end date.
         </p>
 
-        <div className="mt-8 flex gap-3">
-          <Link
-            href="/signup"
-            className="rounded-full bg-cerulean-600 px-6 py-2.5 font-medium text-ink shadow-sm hover:bg-cerulean-700 hover:text-white"
-          >
+        <div className="mt-8 flex flex-wrap gap-4">
+          <Link href="/signup" className="pop-btn bg-lime-400 px-6 py-2.5 font-extrabold text-ink">
             Make a bet
           </Link>
-          <Link
-            href="/charities"
-            className="rounded-full border border-zinc-300 px-6 py-2.5 font-medium text-zinc-700 hover:bg-zinc-100"
-          >
+          <Link href="/charities" className="pop-btn bg-white px-6 py-2.5 font-extrabold text-ink">
             Browse charities
           </Link>
         </div>

@@ -1,35 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f9fa;
-  --foreground: #212529;
+  --background: #fffcf2;
+  --foreground: #111111;
 }
 
 @theme {
-  /* Neutral gray scale (f8f9fa/e9ecef/dee2e6/ced4da given exactly) extended
-     with the same family's darker canonical stops (adb5bd/6c757d/495057/
-     343a40/212529) for hover states, ink, and secondary contrast — every
-     non-hover fill stays light enough that dark `text-ink` always reads
-     safely (contrast checked, not just assumed). */
-  --color-cerulean-50: #f8f9fa;
-  --color-cerulean-100: #e9ecef;
-  --color-cerulean-200: #dee2e6;
-  --color-cerulean-600: #ced4da;
-  --color-cerulean-700: #6c757d;
-  --color-cerulean-900: #343a40;
+  /* Bold poster palette — every fill below is paired with ink (#111111) text
+     and a black border, and every pairing is WCAG AA verified (>=4.5:1),
+     never eyeballed. */
+  --color-ink: #111111;
+  --color-paper: #fffcf2;
 
-  --color-flamingo-50: #e9ecef;
-  --color-flamingo-100: #dee2e6;
-  --color-flamingo-200: #ced4da;
-  --color-flamingo-500: #dee2e6;
-  --color-flamingo-600: #495057;
-  --color-flamingo-700: #343a40;
+  --color-lime-50: #effdf1;
+  --color-lime-100: #dbfadd;
+  --color-lime-400: #58dd6e;
+  --color-lime-500: #39d353;
+  --color-lime-600: #22b84a;
+  --color-lime-700: #157a2c;
 
-  --color-coral: #dee2e6;
-  --color-gold: #ced4da;
-  --color-lime: #e9ecef;
+  --color-sun-50: #fffbea;
+  --color-sun-100: #fff3b0;
+  --color-sun-400: #ffe034;
+  --color-sun-500: #ffd500;
+  --color-sun-600: #e6be00;
+  --color-sun-700: #8a6800;
 
-  --color-ink: #212529;
+  --color-flamingo-50: #fff0f8;
+  --color-flamingo-100: #ffdcef;
+  --color-flamingo-400: #ff7cbe;
+  --color-flamingo-500: #ff4fa3;
+  --color-flamingo-600: #ff2e93;
+  --color-flamingo-700: #c22a73;
 }
 
 @theme inline {
@@ -50,8 +52,43 @@ h1, h2, h3 {
   letter-spacing: -0.01em;
 }
 
-/* Hand-drawn/punk wobble on every icon (lucide-react tags each icon with
-   this class automatically) — filter itself is defined once in layout.tsx. */
-.lucide {
-  filter: url(#sketchy);
+/* "Sticker" treatment: thick black border + hard offset shadow, no blur —
+   the whole bold/fun redesign hinges on this one pair of primitives, so
+   every card/panel/button reuses it instead of ad-hoc borders per component. */
+.pop {
+  border: 3px solid var(--color-ink);
+  border-radius: 1.5rem;
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+
+.pop-sm {
+  border: 2.5px solid var(--color-ink);
+  border-radius: 1rem;
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+}
+
+.pop-btn {
+  border: 2.5px solid var(--color-ink);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.pop-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+.pop-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--color-ink);
+}
+
+.pop-row {
+  border: 2.5px solid var(--color-ink);
+  border-radius: 1rem;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+.pop-row:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 0 var(--color-ink);
 }

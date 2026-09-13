@@ -12,9 +12,9 @@ function defaultDateInput(daysFromNow: number) {
 }
 
 const SECTION_TINTS = {
-  cerulean: { section: "bg-cerulean-50", chip: "bg-cerulean-600", chipText: "text-ink" },
-  flamingo: { section: "bg-flamingo-50", chip: "bg-flamingo-500", chipText: "text-ink" },
-  neutral: { section: "bg-stone-100", chip: "bg-ink", chipText: "text-white" },
+  lime: { section: "bg-lime-50", chip: "bg-lime-400" },
+  flamingo: { section: "bg-flamingo-50", chip: "bg-flamingo-400" },
+  neutral: { section: "bg-sun-50", chip: "bg-ink" },
 } as const;
 
 function FormSection({
@@ -29,13 +29,14 @@ function FormSection({
   children: React.ReactNode;
 }) {
   const styles = SECTION_TINTS[tint];
+  const chipText = tint === "neutral" ? "text-white" : "text-ink";
   return (
-    <section className={`rounded-2xl p-5 shadow-sm ${styles.section}`}>
-      <div className="flex items-center gap-2 text-zinc-900">
-        <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${styles.chipText} ${styles.chip}`}>
+    <section className={`pop p-5 ${styles.section}`}>
+      <div className="flex items-center gap-2.5 text-ink">
+        <div className={`flex h-9 w-9 items-center justify-center rounded-xl border-2 border-ink ${chipText} ${styles.chip}`}>
           {icon}
         </div>
-        <h2 className="font-semibold">{title}</h2>
+        <h2 className="font-heading font-extrabold">{title}</h2>
       </div>
       <div className="mt-4 flex flex-col gap-4">{children}</div>
     </section>
@@ -122,9 +123,9 @@ export default function NewBetForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-      <FormSection icon={<Target size={16} />} title="The goal" tint="cerulean">
-        <label className="flex flex-col gap-1 text-sm text-zinc-700">
+    <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-5">
+      <FormSection icon={<Target size={16} />} title="The goal" tint="lime">
+        <label className="flex flex-col gap-1 text-sm font-bold text-ink">
           What are you committing to?
           <input
             type="text"
@@ -132,16 +133,16 @@ export default function NewBetForm() {
             placeholder="e.g. No smoking for 30 days"
             value={goalText}
             onChange={(e) => setGoalText(e.target.value)}
-            className="rounded-lg border border-cerulean-200 bg-white px-3 py-2 text-zinc-900"
+            className="rounded-xl border-2 border-ink bg-white px-3 py-2 font-medium text-ink outline-none"
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700">
+        <label className="flex flex-col gap-1 text-sm font-bold text-ink">
           Category
           <select
             value={category}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="rounded-lg border border-cerulean-200 bg-white px-3 py-2 text-zinc-900"
+            className="rounded-xl border-2 border-ink bg-white px-3 py-2 font-medium text-ink outline-none"
           >
             {CATEGORY_PRESETS.map((p) => (
               <option key={p.label} value={p.label}>
@@ -151,14 +152,14 @@ export default function NewBetForm() {
           </select>
         </label>
 
-        <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-700">
+        <div className="flex flex-wrap items-center gap-2 text-sm font-bold text-ink">
           <span>How this bet gets verified:</span>
-          <div className="flex rounded-full border border-cerulean-200 bg-white p-0.5">
+          <div className="flex rounded-full border-2 border-ink bg-white p-0.5">
             <button
               type="button"
               onClick={() => setGoalKind("SUBJECTIVE")}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                goalKind === "SUBJECTIVE" ? "bg-ink text-white" : "text-zinc-600"
+              className={`rounded-full px-3 py-1 text-xs font-extrabold transition-colors ${
+                goalKind === "SUBJECTIVE" ? "bg-ink text-white" : "text-ink/60"
               }`}
             >
               Self-reported
@@ -166,8 +167,8 @@ export default function NewBetForm() {
             <button
               type="button"
               onClick={() => setGoalKind("OBJECTIVE")}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                goalKind === "OBJECTIVE" ? "bg-cerulean-600 text-ink" : "text-zinc-600"
+              className={`rounded-full px-3 py-1 text-xs font-extrabold transition-colors ${
+                goalKind === "OBJECTIVE" ? "bg-lime-400 text-ink" : "text-ink/60"
               }`}
             >
               Witness-verified
@@ -176,49 +177,49 @@ export default function NewBetForm() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <label className="flex flex-col gap-1 text-sm text-zinc-700">
+          <label className="flex flex-col gap-1 text-sm font-bold text-ink">
             Starts
             <input
               type="datetime-local"
               required
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="rounded-lg border border-cerulean-200 bg-white px-3 py-2 text-zinc-900"
+              className="rounded-xl border-2 border-ink bg-white px-3 py-2 font-medium text-ink outline-none"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm text-zinc-700">
+          <label className="flex flex-col gap-1 text-sm font-bold text-ink">
             Ends
             <input
               type="datetime-local"
               required
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="rounded-lg border border-cerulean-200 bg-white px-3 py-2 text-zinc-900"
+              className="rounded-xl border-2 border-ink bg-white px-3 py-2 font-medium text-ink outline-none"
             />
           </label>
         </div>
       </FormSection>
 
       <FormSection icon={<span className="text-base leading-none">€</span>} title="The stake" tint="flamingo">
-        <label className="flex flex-col gap-1 text-sm text-zinc-700">
+        <label className="flex flex-col gap-1 text-sm font-bold text-ink">
           Stake
           <input
             type="number"
             min={0}
             value={stakeAmount}
             onChange={(e) => setStakeAmount(Number(e.target.value))}
-            className="rounded-lg border border-flamingo-200 bg-white px-3 py-2 text-zinc-900"
+            className="rounded-xl border-2 border-ink bg-white px-3 py-2 font-medium text-ink outline-none"
           />
         </label>
 
-        <div className="flex flex-col gap-1 text-sm text-zinc-700">
+        <div className="flex flex-col gap-1 text-sm font-bold text-ink">
           If you fail, it goes to
           <CharityPicker charities={charities} value={charityId} onChange={setCharityId} />
         </div>
       </FormSection>
 
       <FormSection icon={<Users size={16} />} title="Witnesses" tint="neutral">
-        <p className="text-sm text-zinc-700">
+        <p className="text-sm font-medium text-ink/80">
           Add at least {MIN_WITNESSES} people to keep you honest — you&apos;ll get a shareable
           invite link for each once the bet is created.
         </p>
@@ -230,13 +231,13 @@ export default function NewBetForm() {
                 placeholder={`Witness ${i + 1} name or nickname`}
                 value={w}
                 onChange={(e) => updateWitness(i, e.target.value)}
-                className="flex-1 rounded-lg border border-stone-300 bg-white px-3 py-2 text-zinc-900"
+                className="flex-1 rounded-xl border-2 border-ink bg-white px-3 py-2 font-medium text-ink outline-none"
               />
               {witnesses.length > MIN_WITNESSES && (
                 <button
                   type="button"
                   onClick={() => removeWitness(i)}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-zinc-400 hover:bg-white/70 hover:text-zinc-600"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-white text-ink hover:bg-sun-100"
                   aria-label="Remove witness"
                 >
                   <X size={16} />
@@ -245,30 +246,27 @@ export default function NewBetForm() {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={addWitness}
-          className="self-start text-sm font-medium text-stone-700"
-        >
+        <button type="button" onClick={addWitness} className="self-start text-sm font-extrabold text-flamingo-700">
           + Add another witness
         </button>
 
-        <label className="flex items-center gap-2 text-sm text-zinc-700">
+        <label className="flex items-center gap-2 text-sm font-bold text-ink">
           <input
             type="checkbox"
             checked={isJournalPublic}
             onChange={(e) => setIsJournalPublic(e.target.checked)}
+            className="h-4 w-4 accent-lime-500"
           />
           Make my journal for this bet public
         </label>
       </FormSection>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm font-bold text-red-600">{error}</p>}
 
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-full bg-cerulean-600 px-4 py-2.5 font-medium text-ink shadow-sm hover:bg-cerulean-700 hover:text-white disabled:opacity-60"
+        className="pop-btn bg-lime-400 px-4 py-2.5 font-extrabold text-ink disabled:opacity-60"
       >
         {submitting ? "Creating bet…" : "Create bet"}
       </button>

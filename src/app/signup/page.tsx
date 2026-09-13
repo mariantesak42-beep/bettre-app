@@ -37,33 +37,33 @@ function SignupForm() {
 
   return (
     <div className="mx-auto max-w-sm px-4 py-16">
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
-        <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-flamingo-500 text-ink">
+      <div className="pop bg-white p-6">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-ink bg-flamingo-400 text-ink">
           <UserPlus size={18} />
         </div>
-        <h1 className="mt-3 text-center text-2xl font-bold text-zinc-900">Sign up</h1>
+        <h1 className="mt-4 text-center font-heading text-2xl font-extrabold text-ink">Sign up</h1>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-          <label className="flex flex-col gap-1 text-sm text-zinc-700">
+          <label className="flex flex-col gap-1 text-sm font-bold text-ink">
             Name
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+              className="rounded-xl border-2 border-ink px-3 py-2 font-medium text-ink outline-none"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm text-zinc-700">
+          <label className="flex flex-col gap-1 text-sm font-bold text-ink">
             Email
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+              className="rounded-xl border-2 border-ink px-3 py-2 font-medium text-ink outline-none"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm text-zinc-700">
+          <label className="flex flex-col gap-1 text-sm font-bold text-ink">
             Password
             <input
               type="password"
@@ -71,21 +71,21 @@ function SignupForm() {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+              className="rounded-xl border-2 border-ink px-3 py-2 font-medium text-ink outline-none"
             />
           </label>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm font-bold text-red-600">{error}</p>}
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-full bg-flamingo-500 px-4 py-2 font-medium text-ink hover:bg-flamingo-600 hover:text-white disabled:opacity-60"
+            className="pop-btn bg-flamingo-400 px-4 py-2 font-extrabold text-ink disabled:opacity-60"
           >
             {submitting ? "Creating account…" : "Create account"}
           </button>
         </form>
-        <p className="mt-4 text-center text-sm text-zinc-600">
+        <p className="mt-4 text-center text-sm font-medium text-ink/70">
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-cerulean-700">
+          <Link href="/login" className="font-extrabold text-flamingo-700">
             Log in
           </Link>
         </p>

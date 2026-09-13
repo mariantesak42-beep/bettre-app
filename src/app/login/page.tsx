@@ -36,44 +36,44 @@ function LoginForm() {
 
   return (
     <div className="mx-auto max-w-sm px-4 py-16">
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
-        <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-cerulean-600 text-ink">
+      <div className="pop bg-white p-6">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-ink bg-lime-400 text-ink">
           <LogIn size={18} />
         </div>
-        <h1 className="mt-3 text-center text-2xl font-bold text-zinc-900">Log in</h1>
+        <h1 className="mt-4 text-center font-heading text-2xl font-extrabold text-ink">Log in</h1>
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-          <label className="flex flex-col gap-1 text-sm text-zinc-700">
+          <label className="flex flex-col gap-1 text-sm font-bold text-ink">
             Email
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+              className="rounded-xl border-2 border-ink px-3 py-2 font-medium text-ink outline-none"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm text-zinc-700">
+          <label className="flex flex-col gap-1 text-sm font-bold text-ink">
             Password
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+              className="rounded-xl border-2 border-ink px-3 py-2 font-medium text-ink outline-none"
             />
           </label>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm font-bold text-red-600">{error}</p>}
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-full bg-cerulean-600 px-4 py-2 font-medium text-ink hover:bg-cerulean-700 hover:text-white disabled:opacity-60"
+            className="pop-btn bg-lime-400 px-4 py-2 font-extrabold text-ink disabled:opacity-60"
           >
             {submitting ? "Logging in…" : "Log in"}
           </button>
         </form>
-        <p className="mt-4 text-center text-sm text-zinc-600">
+        <p className="mt-4 text-center text-sm font-medium text-ink/70">
           No account yet?{" "}
-          <Link href="/signup" className="font-medium text-cerulean-700">
+          <Link href="/signup" className="font-extrabold text-flamingo-700">
             Sign up
           </Link>
         </p>
