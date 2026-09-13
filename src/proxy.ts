@@ -11,7 +11,6 @@ const BET_DETAIL_PATH = /^\/bets\/(?!new$)[^/]+$/;
 const INVITE_PATH = /^\/invite\/[^/]+$/;
 
 const PUBLIC_API_RULES: { method: string; pattern: RegExp }[] = [
-  { method: "GET", pattern: /^\/api\/debug-env$/ }, // temporary diagnostic route, remove with it
   { method: "GET", pattern: /^\/api\/feed$/ },
   { method: "GET", pattern: /^\/api\/charities$/ },
   { method: "GET", pattern: /^\/api\/bets\/[^/]+$/ },
