@@ -1,0 +1,95 @@
+"use client";
+
+import { useState } from "react";
+import { Check, ChevronDown, Clock, Copy, Link2, X } from "lucide-react";
+
+type Witness = {
+  id: string;
+  userId: string | null;
+  label: string | null;
+  inviteToken: string;
+  response: "PENDING" | "CONFIRMED_SUCCESS" | "CONFIRMED_FAILURE";
+  user: { id: string; name: string } | null;
+};
+
+const RESPONSE_STYLES: Record<Witness["response"], string> = {
+  PENDING: "bg-zinc-100 text-zinc-600",
+  CONFIRMED_SUCCESS: "bg-emerald-100 text-emerald-700",
+  CONFIRMED_FAILURE: "bg-red-100 text-red-700",
+};
+
+const RESPONSE_LABELS: Record<Witness["response"], string> = {
+  PENDING: "Pending",
+  CONFIRMED_SUCCESS: "Confirmed success",
+  CONFIRMED_FAILURE: "Confirmed failure",
+};
+
+export default function WitnessRow({ witness, canInvite }: { witness: Witness; canInvite: boolean }) {
+  const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const inviteUrl =
+    typeof window !== "undefined" ? `${window.location.origin}/invite/${witness.inviteToken}` : "";
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard API unavailable — the link is still visible to copy manually
+    }
+  }
+
+  const name = witness.user?.name ?? witness.label ?? "Unclaimed invite";
+
+  return (
+    <li className="rounded-lg border border-zinc-200 bg-white">
+      <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-xs font-semibold text-zinc-500">
+            {name.charAt(0).toUpperCase()}
+          </div>
+          <span className="text-sm text-zinc-800">{name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span
+            className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${RESPONSE_STYLES[witness.response]}`}
+          >
+            {witness.response === "PENDING" && <Clock size={12} />}
+            {witness.response === "CONFIRMED_SUCCESS" && <Check size={12} />}
+            {witness.response === "CONFIRMED_FAILURE" && <X size={12} />}
+            {RESPONSE_LABELS[witness.response]}
+          </span>
+          {canInvite && !witness.userId && (
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="flex items-center gap-1 rounded-full border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-50"
+            >
+              <Link2 size={12} />
+              Invite
+              <ChevronDown size={12} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
+            </button>
+          )}
+        </div>
+      </div>
+      {expanded && (
+        <div className="flex items-center gap-2 border-t border-zinc-100 bg-zinc-50 px-3 py-2.5">
+          <input
+            readOnly
+            value={inviteUrl}
+            onFocus={(e) => e.currentTarget.select()}
+            className="flex-1 truncate rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-xs text-zinc-600"
+          />
+          <button
+            onClick={handleCopy}
+            className="flex shrink-0 items-center gap-1 rounded-md bg-zinc-800 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-zinc-900"
+          >
+            {copied ? <Check size={12} /> : <Copy size={12} />}
+            {copied ? "Copied" : "Copy link"}
+          </button>
+        </div>
+      )}
+    </li>
+  );
+}

@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum GoalKind {
+  SUBJECTIVE
+  OBJECTIVE
+}
+
+enum BetStatus {
+  ACTIVE
+  SUCCESS
+  FAILED
+  DISPUTED // reserved for future manual use; no MVP code path sets this
+}
+
+enum WitnessResponse {
+  PENDING
+  CONFIRMED_SUCCESS
+  CONFIRMED_FAILURE
+}
+
+model User {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  passwordHash   String
+  name           String
+  createdAt      DateTime       @default(now())
+  bets           Bet[]          @relation("BetOwner")
+  witnessRoles   Witness[]
+  journalEntries JournalEntry[]
+  sessions       Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Bet {
+  id              String         @id @default(cuid())
+  ownerId         String
+  owner           User           @relation("BetOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  goalText        String
+  category        String?
+  goalKind        GoalKind       @default(SUBJECTIVE)
+  stakeAmount     Int
+  charityId       String?
+  charity         Charity?       @relation(fields: [charityId], references: [id], onDelete: SetNull)
+  startDate       DateTime
+  endDate         DateTime
+  isJournalPublic Boolean        @default(false)
+  status          BetStatus      @default(ACTIVE)
+  createdAt       DateTime       @default(now())
+  witnesses       Witness[]
+  journalEntries  JournalEntry[]
+
+  @@index([ownerId])
+  @@index([status, endDate])
+}
+
+model Witness {
+  id          String          @id @default(cuid())
+  betId       String
+  bet         Bet             @relation(fields: [betId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  label       String?
+  inviteToken String          @unique
+  response    WitnessResponse @default(PENDING)
+  respondedAt DateTime?
+  createdAt   DateTime        @default(now())
+
+  @@index([betId])
+  @@unique([betId, userId])
+}
+
+model JournalEntry {
+  id        String   @id @default(cuid())
+  betId     String
+  bet       Bet      @relation(fields: [betId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([betId])
+}
+
+model Charity {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  category    String  @default("Other")
+  description String
+  logoUrl     String?
+  websiteUrl  String?
+  bets        Bet[]
+
+  @@index([category])
+}

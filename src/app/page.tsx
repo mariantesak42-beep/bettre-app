@@ -1,69 +1,64 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Handshake, Users, HeartHandshake, NotebookPen } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div>
+      <section className="bg-cerulean-600 text-ink">
+        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+          <Handshake size={56} className="mx-auto text-ink" />
+          <h1 className="mt-5 text-5xl font-bold tracking-tight">Bettre</h1>
+          <p className="mt-3 text-lg font-semibold text-flamingo-700">
+            Bettre yourself or Bettre the world.
           </p>
+          <p className="mx-auto mt-6 max-w-xl text-ink/80">
+            Set a goal and put something on the line. Pull it off, and you win. Don&apos;t, and your
+            stake goes straight to a cause you chose in advance. There&apos;s no losing move — either
+            you get better, or the world does.
+          </p>
+
+          <div className="mt-8 flex justify-center gap-3">
+            <Link
+              href="/signup"
+              className="rounded-full bg-flamingo-500 px-6 py-2.5 font-semibold text-ink shadow-lg shadow-cerulean-900/20 hover:bg-flamingo-600"
+            >
+              Make a bet
+            </Link>
+            <Link
+              href="/feed"
+              className="rounded-full border border-ink/30 px-6 py-2.5 font-medium text-ink hover:bg-white/40"
+            >
+              See the feed
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-4 py-14">
+        <div className="grid gap-4 text-left sm:grid-cols-3">
+          <div className="rounded-2xl bg-cerulean-600 p-5 text-ink shadow-sm">
+            <Users size={36} />
+            <h2 className="mt-3 font-semibold">Witnesses</h2>
+            <p className="mt-1 text-sm text-ink/70">
+              At least two people confirm whether you actually pulled it off.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-flamingo-500 p-5 text-ink shadow-sm">
+            <HeartHandshake size={36} />
+            <h2 className="mt-3 font-semibold">Charity stake</h2>
+            <p className="mt-1 text-sm text-ink/70">
+              Fail, and your stake goes to a cause you picked — so even a loss does some good.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-ink p-5 text-white shadow-sm">
+            <NotebookPen size={36} />
+            <h2 className="mt-3 font-semibold">Public journal</h2>
+            <p className="mt-1 text-sm text-white/70">
+              Share your progress publicly if you want the extra accountability.
+            </p>
+          </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }
