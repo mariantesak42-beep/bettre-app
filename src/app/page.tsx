@@ -36,10 +36,8 @@ export default function Home() {
           </p>
           <p className="mx-auto mt-6 max-w-xl text-base font-medium text-ink/80">
             Set a goal and put something on the line. Pull the bet off, and you win. Don&apos;t, and
-            your stake goes straight to a cause you chose in advance.
-          </p>
-          <p className="mx-auto mt-4 max-w-xl text-xl font-extrabold text-ink">
-            There&apos;s no losing move — either you get better, or the world does.
+            your stake goes straight to a cause you chose in advance. There&apos;s no losing move —
+            either you get better, or the world does.
           </p>
 
           <div className="mt-9 flex flex-col items-center gap-3">
