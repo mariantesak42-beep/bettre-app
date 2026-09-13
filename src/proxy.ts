@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { SESSION_COOKIE } from "@/lib/auth";
 
 const PUBLIC_PAGE_PATHS = ["/", "/login", "/signup", "/feed", "/charities", "/how-it-works"];
@@ -11,7 +10,6 @@ const BET_DETAIL_PATH = /^\/bets\/(?!new$)[^/]+$/;
 const INVITE_PATH = /^\/invite\/[^/]+$/;
 
 const PUBLIC_API_RULES: { method: string; pattern: RegExp }[] = [
-  { method: "GET", pattern: /^\/api\/debug-session$/ }, // temporary diagnostic route, remove with it
   { method: "GET", pattern: /^\/api\/feed$/ },
   { method: "GET", pattern: /^\/api\/charities$/ },
   { method: "GET", pattern: /^\/api\/bets\/[^/]+$/ },
@@ -26,6 +24,14 @@ function isPublicPage(pathname: string): boolean {
   return false;
 }
 
+// Only checks that a session cookie is present, not that it's still valid —
+// a DB round trip here used to run into Prisma's query-engine binary not
+// being resolvable in Proxy's own bundle (a separate issue from the same
+// symptom in regular route handlers, which was fixed via prisma.ts's runtime
+// PRISMA_QUERY_ENGINE_LIBRARY resolution — that fix doesn't reach this bundle).
+// Every route that actually serves data independently calls getCurrentUser()
+// and returns 401 on an invalid/expired session, so this stays a cheap first
+// gate for page navigation, not the source of truth for authorization.
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -42,25 +48,12 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get(SESSION_COOKIE)?.value;
-  let authenticated = false;
-  let proxyError: string | null = null;
-  if (token) {
-    try {
-      const session = await prisma.session.findUnique({
-        where: { token },
-        select: { expiresAt: true },
-      });
-      authenticated = !!session && session.expiresAt > new Date();
-    } catch (error) {
-      proxyError = error instanceof Error ? error.message : String(error);
-    }
-  }
+  const hasSessionCookie = !!request.cookies.get(SESSION_COOKIE)?.value;
 
-  if (authenticated) return NextResponse.next();
+  if (hasSessionCookie) return NextResponse.next();
 
   if (pathname.startsWith("/api/")) {
-    return NextResponse.json({ error: "Not authenticated.", proxyError }, { status: 401 });
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
   const loginUrl = new URL("/login", request.url);
