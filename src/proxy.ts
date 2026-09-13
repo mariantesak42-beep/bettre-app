@@ -44,18 +44,23 @@ export async function proxy(request: NextRequest) {
 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   let authenticated = false;
+  let proxyError: string | null = null;
   if (token) {
-    const session = await prisma.session.findUnique({
-      where: { token },
-      select: { expiresAt: true },
-    });
-    authenticated = !!session && session.expiresAt > new Date();
+    try {
+      const session = await prisma.session.findUnique({
+        where: { token },
+        select: { expiresAt: true },
+      });
+      authenticated = !!session && session.expiresAt > new Date();
+    } catch (error) {
+      proxyError = error instanceof Error ? error.message : String(error);
+    }
   }
 
   if (authenticated) return NextResponse.next();
 
   if (pathname.startsWith("/api/")) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+    return NextResponse.json({ error: "Not authenticated.", proxyError }, { status: 401 });
   }
 
   const loginUrl = new URL("/login", request.url);
