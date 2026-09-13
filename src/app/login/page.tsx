@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { LogIn } from "lucide-react";
+import { LogIn, Sparkles } from "lucide-react";
 import { useAuth } from "../AuthContext";
 
 function LoginForm() {
@@ -14,6 +14,18 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [startingDemo, setStartingDemo] = useState(false);
+
+  async function handleTryDemo() {
+    setStartingDemo(true);
+    const res = await fetch("/api/auth/guest", { method: "POST" });
+    if (!res.ok) {
+      setStartingDemo(false);
+      return;
+    }
+    await refresh();
+    router.push("/bets/new");
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -77,6 +89,15 @@ function LoginForm() {
             Sign up
           </Link>
         </p>
+
+        <button
+          onClick={handleTryDemo}
+          disabled={startingDemo}
+          className="pop-btn mt-4 flex w-full items-center justify-center gap-2 bg-white px-4 py-2 text-sm font-extrabold text-ink disabled:opacity-60"
+        >
+          <Sparkles size={16} />
+          {startingDemo ? "Setting up…" : "Just try it — no signup"}
+        </button>
       </div>
     </div>
   );

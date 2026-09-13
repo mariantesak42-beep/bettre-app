@@ -1,8 +1,28 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { Users, HeartHandshake, NotebookPen } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Users, HeartHandshake, NotebookPen, Sparkles } from "lucide-react";
 import Star from "./Star";
+import { useAuth } from "./AuthContext";
 
 export default function Home() {
+  const router = useRouter();
+  const { refresh } = useAuth();
+  const [startingDemo, setStartingDemo] = useState(false);
+
+  async function handleTryDemo() {
+    setStartingDemo(true);
+    const res = await fetch("/api/auth/guest", { method: "POST" });
+    if (!res.ok) {
+      setStartingDemo(false);
+      return;
+    }
+    await refresh();
+    router.push("/bets/new");
+  }
+
   return (
     <div>
       <section className="relative overflow-hidden border-b-[3px] border-ink bg-sun-400 text-ink">
@@ -15,18 +35,31 @@ export default function Home() {
             Bettre yourself or Bettre the world.
           </p>
           <p className="mx-auto mt-6 max-w-xl text-base font-medium text-ink/80">
-            Set a goal and put something on the line. Pull it off, and you win. Don&apos;t, and your
-            stake goes straight to a cause you chose in advance. There&apos;s no losing move — either
-            you get better, or the world does.
+            Set a goal and put something on the line. Pull the bet off, and you win. Don&apos;t, and
+            your stake goes straight to a cause you chose in advance.
+          </p>
+          <p className="mx-auto mt-4 max-w-xl text-xl font-extrabold text-ink">
+            There&apos;s no losing move — either you get better, or the world does.
           </p>
 
-          <div className="mt-9 flex flex-wrap justify-center gap-4">
-            <Link href="/signup" className="pop-btn bg-flamingo-500 px-7 py-3 text-lg font-extrabold text-ink">
-              Make a bet
-            </Link>
-            <Link href="/feed" className="pop-btn bg-white px-7 py-3 text-lg font-extrabold text-ink">
-              See the feed
-            </Link>
+          <div className="mt-9 flex flex-col items-center gap-3">
+            <button
+              onClick={handleTryDemo}
+              disabled={startingDemo}
+              className="pop-btn flex items-center gap-2 bg-flamingo-500 px-7 py-3 text-lg font-extrabold text-ink disabled:opacity-60"
+            >
+              <Sparkles size={20} />
+              {startingDemo ? "Setting up…" : "Try it now — no signup"}
+            </button>
+            <div className="flex flex-wrap justify-center gap-3 text-sm">
+              <Link href="/signup" className="font-bold text-ink/70 underline underline-offset-2 hover:text-ink">
+                Make a real account
+              </Link>
+              <span className="text-ink/40">·</span>
+              <Link href="/feed" className="font-bold text-ink/70 underline underline-offset-2 hover:text-ink">
+                See the feed
+              </Link>
+            </div>
           </div>
         </div>
       </section>

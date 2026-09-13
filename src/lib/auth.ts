@@ -29,6 +29,18 @@ export async function createSession(userId: string): Promise<{ token: string; ex
   return { token, expiresAt };
 }
 
+export async function startSession(userId: string): Promise<void> {
+  const { token, expiresAt } = await createSession(userId);
+  const cookieStore = await cookies();
+  cookieStore.set(SESSION_COOKIE, token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    expires: expiresAt,
+  });
+}
+
 export async function destroySession(token: string): Promise<void> {
   await prisma.session.deleteMany({ where: { token } });
 }
